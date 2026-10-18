@@ -140,7 +140,7 @@ mini-ats/
 
 ## 🚢 Deployment (Vercel)
 
-1. Push your code to GitHub.
+1. Push code to GitHub.
 2. Import the repository on [Vercel](https://vercel.com).
 3. Add the `MONGODB_URI` environment variable in Vercel project settings.
 4. Deploy!
@@ -151,6 +151,3 @@ mini-ats/
 |---|---|
 | `MONGODB_URI` | Your MongoDB Atlas connection string |
 
-## 📝 License
-
-MIT
