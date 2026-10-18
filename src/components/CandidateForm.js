@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Save, Loader2 } from 'lucide-react';
+import { Save, Loader2, ArrowLeft } from 'lucide-react';
 import { STAGES, POSITIONS } from '@/lib/constants';
 import Toast from './Toast';
 
@@ -22,13 +22,13 @@ export default function CandidateForm({ candidate, isEditing = false }) {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.name.trim()) newErrors.name = 'Full name is required';
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Email address is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Invalid email format';
+      newErrors.email = 'Please enter a valid email address';
     }
-    if (!formData.position) newErrors.position = 'Position is required';
+    if (!formData.position) newErrors.position = 'Job position is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -83,117 +83,151 @@ export default function CandidateForm({ candidate, isEditing = false }) {
   return (
     <>
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 max-w-2xl">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 lg:p-8 max-w-3xl shadow-2xs"
+      >
         <div className="space-y-5">
-          {/* Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name *</label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => handleChange('name', e.target.value)}
-              className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
-                errors.name ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
-              placeholder="e.g. Jane Doe"
-            />
-            {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
+          {/* Row 1: Full Name & Email */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Full Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) => handleChange('name', e.target.value)}
+                className={`w-full px-3.5 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors ${
+                  errors.name ? 'border-red-300 bg-red-50/50' : 'border-gray-300'
+                }`}
+                placeholder="e.g. Aarav Sharma"
+              />
+              {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Email Address <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+                className={`w-full px-3.5 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors ${
+                  errors.email ? 'border-red-300 bg-red-50/50' : 'border-gray-300'
+                }`}
+                placeholder="e.g. aarav.sharma@example.com"
+              />
+              {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
+            </div>
           </div>
 
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Email Address *</label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => handleChange('email', e.target.value)}
-              className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
-                errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
-              placeholder="e.g. jane@example.com"
-            />
-            {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
+          {/* Row 2: Phone & Position */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => handleChange('phone', e.target.value)}
+                className="w-full px-3.5 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                placeholder="e.g. +91 98201 34567"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Position <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <select
+                  value={formData.position}
+                  onChange={(e) => handleChange('position', e.target.value)}
+                  className={`w-full px-3.5 py-2.5 pr-8 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white cursor-pointer transition-colors ${
+                    errors.position ? 'border-red-300 bg-red-50/50' : 'border-gray-300'
+                  }`}
+                >
+                  <option value="">Select a position</option>
+                  {POSITIONS.map((pos) => (
+                    <option key={pos} value={pos}>
+                      {pos}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-gray-400">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+              {errors.position && <p className="text-xs text-red-500 mt-1">{errors.position}</p>}
+            </div>
           </div>
 
-          {/* Phone */}
+          {/* Row 3: Stage */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
-            <input
-              type="tel"
-              value={formData.phone}
-              onChange={(e) => handleChange('phone', e.target.value)}
-              className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              placeholder="e.g. +1 (555) 123-4567"
-            />
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Hiring Stage</label>
+            <div className="relative">
+              <select
+                value={formData.stage}
+                onChange={(e) => handleChange('stage', e.target.value)}
+                className="w-full px-3.5 py-2.5 pr-8 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white cursor-pointer transition-colors"
+              >
+                {STAGES.map((stage) => (
+                  <option key={stage} value={stage}>
+                    {stage}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-gray-400">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
           </div>
 
-          {/* Position */}
+          {/* Row 4: Notes */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Position *</label>
-            <select
-              value={formData.position}
-              onChange={(e) => handleChange('position', e.target.value)}
-              className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white cursor-pointer ${
-                errors.position ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
-            >
-              <option value="">Select a position</option>
-              {POSITIONS.map((pos) => (
-                <option key={pos} value={pos}>{pos}</option>
-              ))}
-            </select>
-            {errors.position && <p className="text-xs text-red-500 mt-1">{errors.position}</p>}
-          </div>
-
-          {/* Stage */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Hiring Stage</label>
-            <select
-              value={formData.stage}
-              onChange={(e) => handleChange('stage', e.target.value)}
-              className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white cursor-pointer"
-            >
-              {STAGES.map((stage) => (
-                <option key={stage} value={stage}>{stage}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Notes */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Notes</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Candidate Notes
+            </label>
             <textarea
               value={formData.notes}
               onChange={(e) => handleChange('notes', e.target.value)}
               rows={4}
-              className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
-              placeholder="Additional notes about the candidate..."
+              className="w-full px-3.5 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none transition-colors"
+              placeholder="Notes on skills, interview feedback, current notice period, salary expectations..."
             />
           </div>
         </div>
 
-        {/* Submit Button */}
-        <div className="mt-8 flex items-center gap-3">
+        {/* Action Buttons */}
+        <div className="mt-8 pt-5 border-t border-gray-100 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-3">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-center"
+          >
+            Cancel
+          </button>
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-xs"
           >
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
               <Save className="w-4 h-4" />
             )}
-            {loading
+            <span>{loading
               ? isEditing ? 'Updating...' : 'Creating...'
               : isEditing ? 'Update Candidate' : 'Create Candidate'}
-          </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            Cancel
+            </span>
           </button>
         </div>
       </form>

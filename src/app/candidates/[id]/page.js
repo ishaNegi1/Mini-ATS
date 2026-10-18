@@ -79,15 +79,18 @@ export default function CandidateDetailPage({ params }) {
   if (error) {
     return (
       <div className="space-y-6">
-        <Link href="/candidates" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700">
+        <Link
+          href="/candidates"
+          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition-colors"
+        >
           <ArrowLeft className="w-4 h-4" /> Back to Candidates
         </Link>
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-          <p className="text-red-500 font-semibold text-lg">Candidate Not Found</p>
+        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center shadow-2xs">
+          <p className="text-red-500 font-bold text-lg">Candidate Not Found</p>
           <p className="text-sm text-gray-500 mt-1">{error}</p>
           <Link
             href="/candidates"
-            className="inline-block mt-4 px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700"
+            className="inline-block mt-4 px-5 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition-colors shadow-xs"
           >
             Go to Candidates
           </Link>
@@ -113,118 +116,133 @@ export default function CandidateDetailPage({ params }) {
       {/* Back Link */}
       <Link
         href="/candidates"
-        className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+        className="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back to Candidates
+        <span>Back to Candidates</span>
       </Link>
 
-      {/* Candidate Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8">
+      {/* Candidate Profile Header Card */}
+      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 lg:p-8 shadow-2xs">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center shrink-0">
-              <span className="text-2xl font-bold text-indigo-600">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-indigo-100 rounded-full flex items-center justify-center shrink-0 shadow-xs">
+              <span className="text-xl sm:text-2xl font-bold text-indigo-600">
                 {candidate.name?.charAt(0)?.toUpperCase() || '?'}
               </span>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">{candidate.name}</h1>
-              <p className="text-sm text-gray-500 mt-0.5">{candidate.position}</p>
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight truncate">
+                {candidate.name}
+              </h1>
+              <p className="text-sm font-medium text-gray-600 mt-0.5 truncate">{candidate.position}</p>
               <div className="mt-2">
                 <StageBadge stage={candidate.stage} />
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2.5 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
             <Link
               href={`/candidates/${id}/edit`}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors shadow-2xs"
             >
               <Pencil className="w-4 h-4" />
-              Edit
+              <span>Edit</span>
             </Link>
             <button
               onClick={() => setShowDelete(true)}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-200 rounded-lg hover:bg-red-50 transition-colors shadow-2xs"
             >
               <Trash2 className="w-4 h-4" />
-              Delete
+              <span>Delete</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Candidate Details */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Contact Info */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h2>
+      {/* Detail Cards: Contact & Timeline */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Contact Information */}
+        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-2xs">
+          <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100">
+            Contact Information
+          </h2>
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                <Mail className="w-5 h-5 text-blue-600" />
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <Mail className="w-4 h-4 text-blue-600" />
               </div>
-              <div>
-                <p className="text-xs text-gray-500">Email</p>
-                <a href={`mailto:${candidate.email}`} className="text-sm text-indigo-600 hover:underline">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Email Address</p>
+                <a
+                  href={`mailto:${candidate.email}`}
+                  className="text-sm font-medium text-indigo-600 hover:text-indigo-800 hover:underline break-all"
+                >
                   {candidate.email}
                 </a>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-                <Phone className="w-5 h-5 text-green-600" />
+
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 bg-emerald-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <Phone className="w-4 h-4 text-emerald-600" />
               </div>
-              <div>
-                <p className="text-xs text-gray-500">Phone</p>
-                <p className="text-sm text-gray-900">{candidate.phone || 'Not provided'}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Phone Number</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {candidate.phone || 'Not provided'}
+                </p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
-                <Briefcase className="w-5 h-5 text-purple-600" />
+
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 bg-purple-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <Briefcase className="w-4 h-4 text-purple-600" />
               </div>
-              <div>
-                <p className="text-xs text-gray-500">Position</p>
-                <p className="text-sm text-gray-900">{candidate.position}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Applied Position</p>
+                <p className="text-sm font-medium text-gray-900">{candidate.position}</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Timeline Info */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Timeline</h2>
+        {/* Timeline & Metadata */}
+        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-2xs">
+          <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100">
+            Application Timeline
+          </h2>
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-indigo-600" />
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 bg-indigo-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <Calendar className="w-4 h-4 text-indigo-600" />
               </div>
-              <div>
-                <p className="text-xs text-gray-500">Applied On</p>
-                <p className="text-sm text-gray-900">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Application Date</p>
+                <p className="text-sm font-medium text-gray-900">
                   {new Date(candidate.createdAt).toLocaleDateString('en-US', {
-                    weekday: 'long',
+                    weekday: 'short',
                     year: 'numeric',
-                    month: 'long',
+                    month: 'short',
                     day: 'numeric',
                   })}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center">
-                <Clock className="w-5 h-5 text-orange-600" />
+
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 bg-amber-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <Clock className="w-4 h-4 text-amber-600" />
               </div>
-              <div>
-                <p className="text-xs text-gray-500">Last Updated</p>
-                <p className="text-sm text-gray-900">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Last Activity</p>
+                <p className="text-sm font-medium text-gray-900">
                   {new Date(candidate.updatedAt).toLocaleDateString('en-US', {
-                    weekday: 'long',
+                    weekday: 'short',
                     year: 'numeric',
-                    month: 'long',
+                    month: 'short',
                     day: 'numeric',
                   })}
                 </p>
@@ -234,14 +252,18 @@ export default function CandidateDetailPage({ params }) {
         </div>
       </div>
 
-      {/* Notes */}
+      {/* Candidate Notes */}
       {candidate.notes && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-2xs">
+          <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
             <FileText className="w-5 h-5 text-gray-400" />
-            Notes
+            <span>Recruiter Notes</span>
           </h2>
-          <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{candidate.notes}</p>
+          <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+            <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
+              {candidate.notes}
+            </p>
+          </div>
         </div>
       )}
     </div>

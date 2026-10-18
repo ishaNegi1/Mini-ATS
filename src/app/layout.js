@@ -24,12 +24,12 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex bg-gray-50">
-          <Suspense fallback={<div className="w-64 shrink-0" />}>
-            <Sidebar />
-          </Suspense>
-        <main className="flex-1 lg:ml-0">
-          <div className="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-6">
+      <body className="min-h-full flex flex-col lg:flex-row bg-gray-50 text-gray-900 font-sans">
+        <Suspense fallback={<div className="hidden lg:block w-64 shrink-0 bg-white border-r border-gray-200 h-screen sticky top-0" />}>
+          <Sidebar />
+        </Suspense>
+        <main className="flex-1 min-w-0 max-w-full overflow-x-hidden">
+          <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
             {children}
           </div>
         </main>
