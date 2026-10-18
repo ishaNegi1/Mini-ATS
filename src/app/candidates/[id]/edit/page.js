@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Pencil } from 'lucide-react';
 import CandidateForm from '@/components/CandidateForm';
 import { FormSkeleton } from '@/components/LoadingSkeleton';
 
 export default function EditCandidatePage({ params }) {
-  const { id } = use(params);
+  const id = params.id;
   const [candidate, setCandidate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

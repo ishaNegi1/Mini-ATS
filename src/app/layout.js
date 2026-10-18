@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 
@@ -24,7 +25,9 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex bg-gray-50">
-        <Sidebar />
+          <Suspense fallback={<div className="w-64 shrink-0" />}>
+            <Sidebar />
+          </Suspense>
         <main className="flex-1 lg:ml-0">
           <div className="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-6">
             {children}

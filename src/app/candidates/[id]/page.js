@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -20,7 +20,7 @@ import Toast from '@/components/Toast';
 import { FormSkeleton } from '@/components/LoadingSkeleton';
 
 export default function CandidateDetailPage({ params }) {
-  const { id } = use(params);
+  const id = params.id;
   const router = useRouter();
   const [candidate, setCandidate] = useState(null);
   const [loading, setLoading] = useState(true);
