@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import {
   ArrowLeft,
   Pencil,
@@ -19,8 +19,9 @@ import DeleteModal from '@/components/DeleteModal';
 import Toast from '@/components/Toast';
 import { FormSkeleton } from '@/components/LoadingSkeleton';
 
-export default function CandidateDetailPage({ params }) {
-  const id = params.id;
+function CandidateDetailContent() {
+  const params = useParams();
+  const id = params?.id;
   const router = useRouter();
   const [candidate, setCandidate] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -30,28 +31,31 @@ export default function CandidateDetailPage({ params }) {
   const [toast, setToast] = useState(null);
 
   useEffect(() => {
+    if (!id) return;
+
+    const fetchCandidate = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/candidates/${id}`);
+        const data = await res.json();
+
+        if (!data.success) {
+          throw new Error(data.error || 'Candidate not found');
+        }
+
+        setCandidate(data.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchCandidate();
   }, [id]);
 
-  const fetchCandidate = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(`/api/candidates/${id}`);
-      const data = await res.json();
-
-      if (!data.success) {
-        throw new Error(data.error || 'Candidate not found');
-      }
-
-      setCandidate(data.data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleDelete = async () => {
+    if (!id) return;
     setDeleteLoading(true);
     try {
       const res = await fetch(`/api/candidates/${id}`, { method: 'DELETE' });
@@ -267,5 +271,13 @@ export default function CandidateDetailPage({ params }) {
         </div>
       )}
     </div>
+  );
+}
+
+export default function CandidateDetailPage() {
+  return (
+    <Suspense fallback={<FormSkeleton />}>
+      <CandidateDetailContent />
+    </Suspense>
   );
 }

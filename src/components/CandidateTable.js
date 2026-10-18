@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Eye, Pencil, Trash2, Mail, Phone, Calendar } from 'lucide-react';
+import { Pencil, Trash2, Mail, Phone, Calendar } from 'lucide-react';
 import StageBadge from './StageBadge';
 
 export default function CandidateTable({ candidates, onDelete }) {
@@ -30,12 +30,9 @@ export default function CandidateTable({ candidates, onDelete }) {
                       </span>
                     </div>
                     <div>
-                      <Link
-                        href={`/candidates/${candidate._id}`}
-                        className="text-sm font-semibold text-gray-900 hover:text-indigo-600 transition-colors"
-                      >
+                      <p className="text-sm font-semibold text-gray-900">
                         {candidate.name}
-                      </Link>
+                      </p>
                       <div className="flex items-center gap-3 mt-0.5 text-xs text-gray-500">
                         <span className="flex items-center gap-1">
                           <Mail className="w-3 h-3 text-gray-400" />
@@ -68,14 +65,6 @@ export default function CandidateTable({ candidates, onDelete }) {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">
                   <div className="flex items-center justify-end gap-1">
-                    <Link
-                      href={`/candidates/${candidate._id}`}
-                      className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                      title="View Candidate"
-                      aria-label={`View ${candidate.name}`}
-                    >
-                      <Eye className="w-4 h-4" />
-                    </Link>
                     <Link
                       href={`/candidates/${candidate._id}/edit`}
                       className="p-1.5 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
@@ -113,12 +102,9 @@ export default function CandidateTable({ candidates, onDelete }) {
                   </span>
                 </div>
                 <div className="min-w-0">
-                  <Link
-                    href={`/candidates/${candidate._id}`}
-                    className="text-sm font-semibold text-gray-900 hover:text-indigo-600 transition-colors truncate block"
-                  >
+                  <p className="text-sm font-semibold text-gray-900 truncate">
                     {candidate.name}
-                  </Link>
+                  </p>
                   <p className="text-xs text-gray-500 truncate flex items-center gap-1 mt-0.5">
                     <Mail className="w-3 h-3 text-gray-400 shrink-0" />
                     <span className="truncate">{candidate.email}</span>
@@ -151,15 +137,8 @@ export default function CandidateTable({ candidates, onDelete }) {
               </span>
             </div>
 
-            {/* Action Bar */}
+            {/* Action Bar (Edit & Delete only) */}
             <div className="flex items-center justify-end gap-2 pt-1">
-              <Link
-                href={`/candidates/${candidate._id}`}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-50 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg border border-gray-200 transition-colors"
-              >
-                <Eye className="w-3.5 h-3.5" />
-                <span>View</span>
-              </Link>
               <Link
                 href={`/candidates/${candidate._id}/edit`}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-50 hover:bg-amber-50 hover:text-amber-600 rounded-lg border border-gray-200 transition-colors"

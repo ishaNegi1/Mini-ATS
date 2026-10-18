@@ -254,19 +254,18 @@ export default function DashboardPage() {
         ) : (
           <div className="divide-y divide-gray-100">
             {recentCandidates.map((candidate) => (
-              <Link
+              <div
                 key={candidate._id}
-                href={`/candidates/${candidate._id}`}
-                className="flex items-center justify-between gap-3 py-3 px-2 sm:px-3 hover:bg-gray-50 -mx-2 rounded-lg transition-colors group"
+                className="flex items-center justify-between gap-3 py-3 px-2 sm:px-3 -mx-2 rounded-lg"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center shrink-0 group-hover:bg-indigo-200 transition-colors">
+                  <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center shrink-0">
                     <span className="text-sm font-bold text-indigo-600">
                       {candidate.name?.charAt(0)?.toUpperCase() || '?'}
                     </span>
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-indigo-600 transition-colors">
+                    <p className="text-sm font-semibold text-gray-900 truncate">
                       {candidate.name}
                     </p>
                     <p className="text-xs text-gray-500 truncate">{candidate.position}</p>
@@ -282,7 +281,7 @@ export default function DashboardPage() {
                     })}
                   </span>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}

@@ -1,38 +1,42 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { ArrowLeft, Pencil } from 'lucide-react';
 import CandidateForm from '@/components/CandidateForm';
 import { FormSkeleton } from '@/components/LoadingSkeleton';
 
-export default function EditCandidatePage({ params }) {
-  const id = params.id;
+function EditCandidateContent() {
+  const params = useParams();
+  const id = params?.id;
   const [candidate, setCandidate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!id) return;
+
+    const fetchCandidate = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/candidates/${id}`);
+        const data = await res.json();
+
+        if (!data.success) {
+          throw new Error(data.error || 'Candidate not found');
+        }
+
+        setCandidate(data.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchCandidate();
   }, [id]);
-
-  const fetchCandidate = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(`/api/candidates/${id}`);
-      const data = await res.json();
-
-      if (!data.success) {
-        throw new Error(data.error || 'Candidate not found');
-      }
-
-      setCandidate(data.data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) return <FormSkeleton />;
 
@@ -56,11 +60,11 @@ export default function EditCandidatePage({ params }) {
   return (
     <div className="space-y-6">
       <Link
-        href={`/candidates/${id}`}
+        href="/candidates"
         className="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        <span>Back to Candidate Profile</span>
+        <span>Back to Candidates</span>
       </Link>
 
       <div>
@@ -71,11 +75,20 @@ export default function EditCandidatePage({ params }) {
           <span>Edit Candidate</span>
         </h1>
         <p className="text-xs sm:text-sm text-gray-500 mt-1">
-          Modify hiring stage, contact details, or notes for <span className="font-semibold text-gray-700">{candidate.name}</span>.
+          Modify hiring stage, contact details, or notes for{' '}
+          <span className="font-semibold text-gray-700">{candidate?.name}</span>.
         </p>
       </div>
 
       <CandidateForm candidate={candidate} isEditing={true} />
     </div>
+  );
+}
+
+export default function EditCandidatePage() {
+  return (
+    <Suspense fallback={<FormSkeleton />}>
+      <EditCandidateContent />
+    </Suspense>
   );
 }
